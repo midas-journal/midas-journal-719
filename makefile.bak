@@ -1,0 +1,131 @@
+# compiler used by implicit rules
+CXX = g++ -Wall
+CC = gcc -Wall
+
+#DEFS = -DLIST
+
+#INCS=$(PNGINC) $(LPINC) $(GLUIINC) $(LUAINC) $(LMINC)
+
+CXXFLAGS = -O4 -ansi 
+#CXXFLAGS = $(INCS) -I/opt/local/include -O4 -ansi 
+
+CFLAGS = -O4 -ansi 
+#CFLAGS = $(INCS) -I/opt/local/include -O4 -ansi 
+
+#LIBS = $(LIBDIR) -L/opt/local/lib -lglui -lglut -lglu -lGL -lpng -lm
+LIBS = -lglui -lglut -lglu -lGL -lpng -lm
+
+# object files 
+CMDOBJS = \
+	main-cmd.o \
+	TriMesh_bounding.o \
+	TriMesh_connectivity.o \
+	TriMesh_curvature.o \
+	TriMesh_grid.o \
+	TriMesh_io.o \
+	TriMesh_normals.o \
+	TriMesh_pointareas.o \
+	reorder_verts.o \
+	TriMesh_stats.o \
+	remove.o \
+	filter.o \
+	TriMesh_tstrips.o \
+	KDtree.o \
+	error.o \
+	time.o \
+	tribox.o \
+	boxbox.o \
+	sample.o \
+	stratify.o \
+	pointsample.o
+
+TRIOBJS = \
+	tri.o \
+	TriMesh_bounding.o \
+	TriMesh_connectivity.o \
+	TriMesh_grid.o \
+	reorder_verts.o \
+	remove.o \
+	filter.o \
+	TriMesh_pointareas.o \
+	TriMesh_curvature.o \
+	TriMesh_io.o \
+	TriMesh_normals.o \
+	TriMesh_stats.o \
+	TriMesh_tstrips.o \
+	KDtree.o \
+	glutwm.o \
+	error.o \
+	trimeshwindow.o \
+	time.o \
+	tribox.o \
+	boxbox.o \
+	pngimage.o \
+	sample.o \
+	stratify.o \
+	pointsample.o \
+	modelwindow.o
+
+GUIOBJS = \
+	main.o \
+	TriMesh_bounding.o \
+	TriMesh_connectivity.o \
+	TriMesh_grid.o \
+	reorder_verts.o \
+	samplewindow.o \
+	remove.o \
+	filter.o \
+	TriMesh_pointareas.o \
+	TriMesh_curvature.o \
+	TriMesh_io.o \
+	TriMesh_normals.o \
+	TriMesh_stats.o \
+	TriMesh_tstrips.o \
+	KDtree.o \
+	glutwm.o \
+	error.o \
+	trimeshwindow.o \
+	time.o \
+	tribox.o \
+	boxbox.o \
+	pngimage.o \
+	sample.o \
+	stratify.o \
+	pointsample.o \
+	modelwindow.o
+
+all: sample
+
+sample-cmd: $(CMDOBJS) 
+	$(CXX) -o $@ $(CMDOBJS) $(LIBS)
+
+sample: $(GUIOBJS) 
+	$(CXX) -o $@ $(GUIOBJS) $(LIBS)
+
+VIEWOBJS=\
+	viewbpts.o \
+	modelwindow.o \
+	glutwm.o  \
+	error.o \
+	pngimage.o \
+	time.o
+
+viewbpts: $(VIEWOBJS) 
+	$(CXX) -o $@ $(VIEWOBJS) $(LIBS)
+
+tri: $(TRIOBJS) 
+	$(CXX) -o $@ $(TRIOBJS) $(LIBS)
+
+depend: *.cpp *.c
+	gcc -MM *.cpp *.c > depend
+
+# get rid of objects
+clean:
+	\rm *.o
+
+links:
+	ln -s libd/*.cpp libd/*.h libd/*.c .
+	ln -s libs/*.cc libs/*.h .
+
+clean-links:
+	rm -f `find . -type l`
